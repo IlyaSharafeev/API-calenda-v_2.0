@@ -1,12 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './products/products.controller';
-import {ProductsService} from "./products/products.service";
+import { CalendarDtoModule } from './calendar/dto/calendar-dto.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [],
-  controllers: [AppController, ProductsController],
-  providers: [AppService, ProductsService],
+  imports: [
+    CalendarDtoModule,
+    MongooseModule.forRoot(
+      'mongodb://IlyaSharafeev:Ze74790309@localhost:7017',
+      { dbName: 'CalendarDB' },
+    ),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

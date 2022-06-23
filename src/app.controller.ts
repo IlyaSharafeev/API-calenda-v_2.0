@@ -7,6 +7,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return 'Welcome to backend, fuck! '
+    return 'Welcome to backend, fuck! ';
   }
 }
