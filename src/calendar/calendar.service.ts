@@ -1,26 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateCalendarDto } from './dto/create-calendar.dto';
-import { Calendar, CalendarDocument } from './schemas/calendar-schema';
+import { Event, CalendarDocument } from './schemas/calendar-schema';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
 
 @Injectable()
 export class CalendarService {
   constructor(
-    @InjectModel(Calendar.name) private calendarModule: Model<CalendarDocument>,
+    @InjectModel(Event.name) private calendarModel: Model<CalendarDocument>,
   ) {}
 
-  async getAll(): Promise<Calendar[]> {
-    return this.calendarModule.find().exec();
+  async getAll(): Promise<Event[]> {
+    return this.calendarModel.find().exec();
   }
 
-  async getById(id: string): Promise<Calendar> {
-    return this.calendarModule.findById(id);
+  async getById(id: string): Promise<Event> {
+    return this.calendarModel.findById(id);
   }
 
-  async create(createCalendarDto): Promise<Calendar> {
-    const newEvent = new this.calendarModule();
+  async create(createCalendarDto) {
+    const result = await this.calendarModel.find({
+      date_end: { $gte: createCalendarDto.date_start },
+      date_start: { $lte: createCalendarDto.date_end },
+    });
+    if (result.length > 0) {
+      throw new HttpException('Time is already taken', HttpStatus.FORBIDDEN);
+    }
+    const newEvent = new this.calendarModel();
     newEvent.title = createCalendarDto.title;
     newEvent.description = createCalendarDto.description;
     newEvent.date_start = createCalendarDto.date_start;
@@ -28,11 +34,11 @@ export class CalendarService {
     return newEvent.save();
   }
 
-  async remove(id: string): Promise<Calendar> {
-    return this.calendarModule.findByIdAndRemove(id);
+  async remove(id: string): Promise<Event> {
+    return this.calendarModel.findByIdAndRemove(id);
   }
 
-  async update(id: string, productDto: UpdateCalendarDto): Promise<Calendar> {
-    return this.calendarModule.findByIdAndUpdate(id, productDto, { new: true });
+  async update(id: string, productDto: UpdateCalendarDto): Promise<Event> {
+    return this.calendarModel.findByIdAndUpdate(id, productDto, { new: true });
   }
 }

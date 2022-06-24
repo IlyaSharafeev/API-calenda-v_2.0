@@ -1,27 +1,32 @@
-import { IsEmpty, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator";
+import { getUnixTime } from 'date-fns';
 
 export class CreateCalendarDto {
   @IsNotEmpty()
-  readonly date: any;
+  private readonly date: string;
 
   @IsNotEmpty()
   @IsNumber()
-  readonly duration: any;
+  @IsPositive()
+  readonly duration: number;
 
   @IsNotEmpty()
   @IsString()
   readonly title: string;
 
   @IsString()
-  @IsEmpty()
   readonly description: string;
 
   public getData() {
     return {
-      date_start: this.date,
-      date_end: this.date + this.duration,
+      date_start: this.getTimeInSeconds(this.date),
+      date_end: this.getTimeInSeconds(this.date) + this.duration,
       title: this.title,
       description: this.description,
     };
+  }
+
+  public getTimeInSeconds(date) {
+    return getUnixTime(new Date(date));
   }
 }

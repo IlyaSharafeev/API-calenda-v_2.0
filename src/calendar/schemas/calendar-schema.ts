@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type CalendarDocument = Calendar & Document;
+export type CalendarDocument = Event & Document;
 
 @Schema({
   timestamps: true,
 })
-export class Calendar {
+export class Event {
   @Prop()
   date_start: number;
 
@@ -19,4 +19,4 @@ export class Calendar {
   description: string;
 }
 
-export const CalendarSchema = SchemaFactory.createForClass(Calendar);
+export const CalendarSchema = SchemaFactory.createForClass(Event);
