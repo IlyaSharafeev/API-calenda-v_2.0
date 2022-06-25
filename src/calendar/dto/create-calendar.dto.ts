@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
 import { getUnixTime } from 'date-fns';
 
 export class CreateCalendarDto {

@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CalendarDtoModule } from './calendar/dto/calendar-dto.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -11,8 +10,12 @@ import { MongooseModule } from '@nestjs/mongoose';
       'mongodb://IlyaSharafeev:Ze74790309@localhost:7017',
       { dbName: 'CalendarDB' },
     ),
+    ConfigModule.forRoot({
+      envFilePath: '.env.local',
+      isGlobal: true,
+    }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
