@@ -41,7 +41,7 @@ export class Helper {
     const CONDITION_TIME_THREE_HOURS = 10800; // 3h = 10800s
     const timeToStart = eventData.date_start;
     const timeToNow = getUnixTime(new Date());
-    if(Number(timeToNow) - Number(timeToStart) < CONDITION_TIME_THREE_HOURS){
+    if(Number(timeToStart) - Number(timeToNow) < CONDITION_TIME_THREE_HOURS){
       throw new HttpException(
         'Less than 3 hours left before the event',
         HttpStatus.METHOD_NOT_ALLOWED,

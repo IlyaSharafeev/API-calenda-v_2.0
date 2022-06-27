@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Event, CalendarDocument } from './schemas/calendar-schema';
-import { UpdateCalendarDto } from './dto/update-calendar.dto';
 
 @Injectable()
 export class CalendarService {
@@ -23,7 +22,7 @@ export class CalendarService {
     return this.calendarModel.findById(id);
   }
 
-  async create(createCalendarDto) {
+  async create(createCalendarDto): Promise<Event> {
     const newEvent = new this.calendarModel();
     newEvent.title = createCalendarDto.title;
     newEvent.description = createCalendarDto.description;
@@ -36,7 +35,15 @@ export class CalendarService {
     return this.calendarModel.findByIdAndRemove(id);
   }
 
-  async update(id: string, productDto: UpdateCalendarDto): Promise<Event> {
-    return this.calendarModel.findByIdAndUpdate(id, productDto, { new: true });
+  async update(
+    id: string,
+    calendarDto: {
+      date_start: number;
+      description: string;
+      date_end: number;
+      title: string;
+    },
+  ): Promise<Event> {
+    return this.calendarModel.findByIdAndUpdate(id, calendarDto, { new: true });
   }
 }

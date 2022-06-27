@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
 import { getUnixTime } from 'date-fns';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class CreateCalendarDto {
   @IsNotEmpty()
@@ -27,6 +28,14 @@ export class CreateCalendarDto {
   }
 
   public getTimeInSeconds(date) {
-    return getUnixTime(new Date(date));
+    const unixTime = getUnixTime(new Date(date));
+    if(unixTime < 0) {
+      throw new HttpException(
+        'Не верно создано событие',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    console.log(typeof unixTime);
+    return unixTime;
   }
 }
