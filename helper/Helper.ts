@@ -1,8 +1,8 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectModel } from '@nestjs/mongoose';
+import { HttpException, HttpStatus } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { InjectModel } from "@nestjs/mongoose";
 import { CalendarDocument, Event } from "../src/calendar/schemas/calendar-schema";
-import { Model } from 'mongoose';
+import { Model } from "mongoose";
 import { getUnixTime } from "date-fns";
 
 export class Helper {
@@ -38,10 +38,9 @@ export class Helper {
   }
 
   async checkTime(eventData) {
-    const CONDITION_TIME_THREE_HOURS = 10800; // 3h = 10800s
     const timeToStart = eventData.date_start;
     const timeToNow = getUnixTime(new Date());
-    if(Number(timeToStart) - Number(timeToNow) < CONDITION_TIME_THREE_HOURS){
+    if(Number(timeToStart) - Number(timeToNow) < this.configService.get('CONDITION_TIME_THREE_HOURS')){
       throw new HttpException(
         'Less than 3 hours left before the event',
         HttpStatus.METHOD_NOT_ALLOWED,

@@ -35,7 +35,6 @@ export class CreateCalendarDto {
         HttpStatus.BAD_REQUEST,
       );
     }
-    console.log(typeof unixTime);
     return unixTime;
   }
 }
